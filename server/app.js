@@ -18,6 +18,6 @@ app.use(require('./middleware/validate-session'));
 
 app.use('/plant', plant);
 
-app.listen(3000, function(){
-    console.log("App is listening on 3000.")
+app.listen(process.env.PORT, function(){
+    console.log(`App is listening on ${process.env.PORT}`)
 });

@@ -13,6 +13,7 @@ router.post('/myplant', validateSession, (req, res) => {
        var alive = req.body.plant.alive;
        var soil = req.body.plant.soil;
        var notes = req.body.plant.notes
+       var user = req.user
     
     Plant.create({
         plantname: plantname,
@@ -21,14 +22,19 @@ router.post('/myplant', validateSession, (req, res) => {
         sun: sun,
         alive: alive,
         soil: soil,
-        notes: notes
+        notes: notes,
+        owner: user.id
+
     })
     .then(plant => res.status(200).json(plant))
     .catch(err => res.json(err))
 }),
 
-router.get('/myplant', validateSession, (req, res) => {
-    Plant.findAll()
+router.get('/myplant/', validateSession, (req, res) => {
+   
+    Plant.findAll({ 
+        
+    })
         .then(plant => res.status(200).json(plant))
         .catch(err => res.status(500).json({
             error: err
@@ -45,12 +51,14 @@ router.get('/:id', validateSession, (req, res) => {
 })
 
 router.put('/:id', validateSession, (req, res) => {
-    Plant.update(req.body, {
+    Plant.update(req.body.plant, {
          where: { 
           id: req.params.id 
         }
      })
-     .then(plant => res.status(200).json(plant))
+     .then(plant => res.json({
+         plant: plant
+     }))
      .catch(err => res.json({
           error: err
        }))
